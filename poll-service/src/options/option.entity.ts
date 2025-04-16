@@ -1,6 +1,3 @@
-class Option {
-    constructor(value: string) {}
+export class Option {
+    text: string;
 }
-export {
-    Option
-};
