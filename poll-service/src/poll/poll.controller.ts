@@ -29,9 +29,9 @@ export class PollController {
     return this.pollService.findOne(pollId);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: UpdatePollDto) {
-    return this.pollService.update(id, dto);
+  @Patch(':pollId')
+  update(@Param('pollId') pollId: string, @Body() dto: UpdatePollDto) {
+    return this.pollService.update(pollId, dto);
   }
 
   @Delete(':pollId')
