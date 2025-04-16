@@ -1,24 +1,36 @@
 import { Injectable } from '@nestjs/common';
-import Poll from 'src/poll/poll.entity';
-import { Option } from 'src/options/option.entity';
+import { Poll } from './poll.entity';
+import { CreatePollDto } from './dto/create-poll.dto';
+import { PollMapper } from './poll.mapper';
+import { UpdatePollDto } from './dto/update-poll.dto';
 
 @Injectable()
 export class PollService {
-  getPoll(pollId: string): Poll {
-    const optionOne = new Option('Do more');
-    const optionTwo = new Option('Do less');
-    const optionThree = new Option('Do nothing');
+  private polls: Poll[] = [];
 
-    const poll: Poll = {
-      title: 'My first Poll',
-      question: 'What are the next steps?',
-      options: [
-        optionOne,
-        optionTwo,
-        optionThree
-      ]
-    };
-    
+  create(dto: CreatePollDto): Poll {
+    const poll = PollMapper.fromCreateDto(dto);
+    this.polls.push(poll);
     return poll;
+  }
+
+  findAll(): Poll[] {
+    return this.polls;
+  }
+
+  findOne(pollId: string): Poll | undefined {
+    return this.polls.find(p => p.pollId === pollId);
+  }
+
+  update(pollId: string, dto: UpdatePollDto): Poll | undefined {
+    const poll = this.findOne(pollId);
+    if (poll) {
+      Object.assign(poll, dto);
+    }
+    return poll;
+  }
+  
+  remove(pollId: string): void {
+    this.polls = this.polls.filter(p => p.pollId !== pollId);
   }
 }

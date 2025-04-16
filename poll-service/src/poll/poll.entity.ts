@@ -1,11 +1,8 @@
-import type { Option } from '../options/option.entity';
+import { Option } from "src/options/option.entity";
 
-class Poll {
+export class Poll {
     pollId?: string;
     title: string;
     question: string;
     options: Array<Option>;
-
-    constructor() {}
 }
-export default Poll;
