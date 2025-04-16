@@ -4,7 +4,6 @@ import { Type } from 'class-transformer';
 
 import { OptionDto } from '../../options/dto/option.dto';
 
-
 export class CreatePollDto {
     @ApiProperty()
     @IsString()
@@ -22,7 +21,7 @@ export class CreatePollDto {
     @Type(() => OptionDto)
     options: OptionDto[];
 
-    constructor(title, question, options){
+    constructor(title: string, question: string, options: OptionDto[]) {
         this.title = title;
         this.question = question;
         this.options = options;
