@@ -1,6 +1,7 @@
 import { IsString, MinLength, IsArray, ValidateNested } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
+
 import { OptionDto } from 'src/options/option.dto';
 
 export class CreatePollDto {

@@ -2,7 +2,7 @@ import { IsString, MinLength, IsArray } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Option } from '../../options/option.entity';
 
-class PollDto {
+export class PollDto {
     @ApiProperty()
     @IsString()
     pollId?: string;
@@ -20,4 +20,3 @@ class PollDto {
     @IsArray()
     options: Array<Option>;
 }
-export default PollDto;

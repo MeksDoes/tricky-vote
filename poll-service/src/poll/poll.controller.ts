@@ -1,7 +1,8 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-import PollDto from './dto/get-poll.dto';
-import { PollService } from 'src/poll/poll.service';
 import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
+
+import { PollDto } from './dto/get-poll.dto';
+import { PollService } from 'src/poll/poll.service';
 import { CreatePollDto } from './dto/create-poll.dto';
 import { UpdatePollDto } from './dto/update-poll.dto';
 
