@@ -1,5 +1,5 @@
 import { CreatePollDto } from './dto/create-poll.dto';
-import { Poll } from './poll.entity';
+import { Poll } from './entities/poll.entity';
 
 export class PollMapper {
   static fromCreateDto(dto: CreatePollDto): Poll {

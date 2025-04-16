@@ -5,4 +5,8 @@ export class OptionDto {
     @ApiProperty()
     @IsString()
     text: string;
+
+    constructor(text) {
+        this.text = text;
+    }
 }
