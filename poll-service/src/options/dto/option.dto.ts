@@ -6,7 +6,7 @@ export class OptionDto {
     @IsString()
     text: string;
 
-    constructor(text) {
+    constructor(text: string) {
         this.text = text;
     }
 }

@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    Patch,
+    Post,
+} from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 
 import { Poll } from './entities/poll.entity';
@@ -6,37 +14,36 @@ import { CreatePollDto } from './dto/create-poll.dto';
 import { UpdatePollDto } from './dto/update-poll.dto';
 import { PollService } from './poll.service';
 
-
 @Controller('polls')
 export class PollController {
-  constructor(private readonly pollService: PollService) {}
+    constructor(private readonly pollService: PollService) {}
 
-  @Post()
-  @ApiCreatedResponse({type: Poll})
-  create(@Body() createPollDto: CreatePollDto) {
-    return this.pollService.create(createPollDto);
-  }
+    @Post()
+    @ApiCreatedResponse({ type: Poll })
+    create(@Body() createPollDto: CreatePollDto) {
+        return this.pollService.create(createPollDto);
+    }
 
-  @Get()
-  @ApiOkResponse({type: Poll, isArray: true})
-  findAll() {
-    return this.pollService.findAll();
-  }
+    @Get()
+    @ApiOkResponse({ type: Poll, isArray: true })
+    findAll() {
+        return this.pollService.findAll();
+    }
 
-  @Get(':pollId')
-  @ApiOkResponse({type: Poll })
-  findOne(@Param('pollId') pollId: string) {
-    return this.pollService.findOne(pollId);
-  }
+    @Get(':pollId')
+    @ApiOkResponse({ type: Poll })
+    findOne(@Param('pollId') pollId: string) {
+        return this.pollService.findOne(pollId);
+    }
 
-  @Patch(':pollId')
-  update(@Param('pollId') pollId: string, @Body() dto: UpdatePollDto) {
-    return this.pollService.update(pollId, dto);
-  }
+    @Patch(':pollId')
+    update(@Param('pollId') pollId: string, @Body() dto: UpdatePollDto) {
+        return this.pollService.update(pollId, dto);
+    }
 
-  @Delete(':pollId')
-  @ApiOkResponse()
-  remove(@Param('pollId') pollId: string)  {
-    this.pollService.remove(pollId);
-  }
+    @Delete(':pollId')
+    @ApiOkResponse()
+    remove(@Param('pollId') pollId: string) {
+        this.pollService.remove(pollId);
+    }
 }
