@@ -1,10 +1,10 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 
-import { PollDto } from './dto/get-poll.dto';
-import { PollService } from 'src/poll/poll.service';
+import { Poll } from './entities/poll.entity';
 import { CreatePollDto } from './dto/create-poll.dto';
 import { UpdatePollDto } from './dto/update-poll.dto';
+import { PollService } from './poll.service';
 
 
 @Controller('polls')
@@ -12,19 +12,19 @@ export class PollController {
   constructor(private readonly pollService: PollService) {}
 
   @Post()
-  @ApiCreatedResponse({type: PollDto})
+  @ApiCreatedResponse({type: Poll})
   create(@Body() createPollDto: CreatePollDto) {
     return this.pollService.create(createPollDto);
   }
 
   @Get()
-  @ApiOkResponse({type: PollDto, isArray: true})
+  @ApiOkResponse({type: Poll, isArray: true})
   findAll() {
     return this.pollService.findAll();
   }
 
   @Get(':pollId')
-  @ApiOkResponse({type: PollDto })
+  @ApiOkResponse({type: Poll })
   findOne(@Param('pollId') pollId: string) {
     return this.pollService.findOne(pollId);
   }
@@ -36,7 +36,7 @@ export class PollController {
 
   @Delete(':pollId')
   @ApiOkResponse()
-  remove(@Param('pollId') pollId: string) {
-    return this.pollService.remove(pollId);
+  remove(@Param('pollId') pollId: string)  {
+    this.pollService.remove(pollId);
   }
 }
