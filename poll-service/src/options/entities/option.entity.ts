@@ -1,3 +1,3 @@
 export class Option {
-    text: string;
+  text: string;
 }

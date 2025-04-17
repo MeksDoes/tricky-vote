@@ -5,7 +5,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - 'mongodb_data:/bitnami/mongodb'
+      - "mongodb_data:/bitnami/mongodb"
     environment:
       - MONGODB_ROOT_USER=root
       - MONGODB_ROOT_PASSWORD=toor
