@@ -5,25 +5,25 @@ import { Type } from 'class-transformer';
 import { OptionDto } from '../../options/dto/option.dto';
 
 export class CreatePollDto {
-    @ApiProperty()
-    @IsString()
-    @MinLength(2)
-    title: string;
+  @ApiProperty()
+  @IsString()
+  @MinLength(2)
+  title: string;
 
-    @ApiProperty()
-    @IsString()
-    @MinLength(5)
-    question: string;
+  @ApiProperty()
+  @IsString()
+  @MinLength(5)
+  question: string;
 
-    @ApiProperty({ type: [OptionDto] })
-    @IsArray()
-    @ValidateNested({ each: true })
-    @Type(() => OptionDto)
-    options: OptionDto[];
+  @ApiProperty({ type: [OptionDto] })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => OptionDto)
+  options: OptionDto[];
 
-    constructor(title: string, question: string, options: OptionDto[]) {
-        this.title = title;
-        this.question = question;
-        this.options = options;
-    }
+  constructor(title: string, question: string, options: OptionDto[]) {
+    this.title = title;
+    this.question = question;
+    this.options = options;
+  }
 }
