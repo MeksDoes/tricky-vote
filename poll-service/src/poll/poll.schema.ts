@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { v4 as uuidv4 } from 'uuid';
 
 import { Option } from '../options/entities/option.entity';
 
@@ -7,13 +8,13 @@ export type PollDocument = Poll & Document;
 
 @Schema({ timestamps: true })
 export class Poll extends Document {
-  @Prop({ type: String })
+  @Prop({ type: String, default: () => uuidv4(), unique: true })
   pollId?: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, minlength: 2 })
   title: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, minlength: 5 })
   question: string;
 
   @Prop({ type: [{ text: String }], default: [] })
