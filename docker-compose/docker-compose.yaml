@@ -2,6 +2,7 @@ services:
   # https://hub.docker.com/r/bitnami/mongodb
   mongodb:
     image: docker.io/bitnami/mongodb:8.0
+    platform: linux/amd64
     ports:
       - "27017:27017"
     volumes:
@@ -9,8 +10,8 @@ services:
     environment:
       - MONGODB_ROOT_USER=root
       - MONGODB_ROOT_PASSWORD=toor
-      - MONGODB_USER=serviceuser
-      - MONGODB_USER_PASSWORD=password
+      - MONGODB_USERNAME=serviceuser
+      - MONGODB_PASSWORD=password
       - MONGODB_DATABASE=polldb
 
   # https://hub.docker.com/r/bitnami/postgresql
