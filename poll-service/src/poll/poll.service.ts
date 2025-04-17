@@ -1,37 +1,36 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
-import { Poll } from './entities/poll.entity';
 import { CreatePollDto } from './dto/create-poll.dto';
-import { PollMapper } from './poll.mapper';
 import { UpdatePollDto } from './dto/update-poll.dto';
+import { Poll, PollDocument } from './poll.schema';
 
 @Injectable()
 export class PollService {
-  private polls: Poll[] = [];
+  @InjectModel(Poll.name) private pollModel: Model<PollDocument>;
 
-  create(dto: CreatePollDto): Poll {
-    const poll = PollMapper.fromCreateDto(dto);
-    this.polls.push(poll);
-    return poll;
+  async create(dto: CreatePollDto): Promise<PollDocument> {
+    const createdPoll = new this.pollModel(dto);
+    return createdPoll.save();
   }
 
-  findAll(): Poll[] {
-    return this.polls;
+  async findAll(): Promise<PollDocument[]> {
+    return this.pollModel.find().exec();
   }
 
-  findOne(pollId: string): Poll | undefined {
-    return this.polls.find((p) => p.pollId === pollId);
+  async findOne(pollId: string): Promise<PollDocument | null> {
+    return this.pollModel.findById(pollId).exec();
   }
 
-  update(pollId: string, dto: UpdatePollDto): Poll | undefined {
-    const poll = this.findOne(pollId);
-    if (poll) {
-      Object.assign(poll, dto);
-    }
-    return poll;
+  async update(
+    pollId: string,
+    dto: UpdatePollDto,
+  ): Promise<PollDocument | null> {
+    return this.pollModel.findByIdAndUpdate(pollId, dto, { new: true }).exec();
   }
 
-  remove(pollId: string): void {
-    this.polls = this.polls.filter((p) => p.pollId !== pollId);
+  async remove(pollId: string): Promise<void> {
+    await this.pollModel.findByIdAndDelete(pollId).exec();
   }
 }
