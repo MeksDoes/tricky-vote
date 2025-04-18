@@ -1,5 +1,5 @@
 import { UUID } from 'crypto';
-import { Option } from '../../options/entities/option.entity';
+import { Option } from '../options/option.model';
 
 export class Poll {
   pollId?: UUID;
