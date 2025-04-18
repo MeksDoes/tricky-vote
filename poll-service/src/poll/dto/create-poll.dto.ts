@@ -1,4 +1,10 @@
-import { IsString, MinLength, IsArray, ValidateNested } from 'class-validator';
+import {
+  IsString,
+  MinLength,
+  IsArray,
+  ValidateNested,
+  ArrayUnique,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 
@@ -19,6 +25,9 @@ export class CreatePollDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => OptionDto)
+  @ArrayUnique((o: OptionDto) => o.text, {
+    message: 'Each option text must be unique within a poll',
+  })
   options: OptionDto[];
 
   constructor(title: string, question: string, options: OptionDto[]) {

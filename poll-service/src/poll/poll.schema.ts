@@ -17,7 +17,16 @@ export class Poll extends Document {
   @Prop({ required: true, minlength: 5 })
   question: string;
 
-  @Prop({ type: [{ text: String }], default: [] })
+  @Prop({
+    type: [{ text: String }],
+    validate: {
+      validator: (arr: { text: string }[]) => {
+        const texts = arr.map((o) => o.text);
+        return new Set(texts).size === texts.length;
+      },
+      message: 'Each option text must be unique within a poll',
+    },
+  })
   options: Array<Option>;
 }
 
