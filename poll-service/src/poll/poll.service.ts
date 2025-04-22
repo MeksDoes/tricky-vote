@@ -20,17 +20,14 @@ export class PollService {
   }
 
   async findOne(pollId: string): Promise<PollDocument | null> {
-    return this.pollModel.findById(pollId).exec();
+    return this.pollModel.findOne({ pollId }).exec();
   }
 
-  async update(
-    pollId: string,
-    dto: UpdatePollDto,
-  ): Promise<PollDocument | null> {
-    return this.pollModel.findByIdAndUpdate(pollId, dto, { new: true }).exec();
+  async update(pollId: string, dto: UpdatePollDto): Promise<PollDocument | null> {
+    return this.pollModel.findOneAndUpdate({ pollId }, dto, { new: true }).exec();
   }
 
   async remove(pollId: string): Promise<void> {
-    await this.pollModel.findByIdAndDelete(pollId).exec();
+    await this.pollModel.deleteOne({ pollId }).exec();
   }
 }
