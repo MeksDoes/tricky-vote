@@ -1,0 +1,8 @@
+{
+  "title": "Tricky Vote",
+  "poll": {
+    "create": {
+      "newPoll": "Create Poll"
+    }
+  }
+}
