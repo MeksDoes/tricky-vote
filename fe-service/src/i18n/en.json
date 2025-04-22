@@ -1,8 +1,31 @@
 {
   "title": "Tricky Vote",
+  "navigation": {
+    "landingPage": "Home",
+    "createPoll": "Create poll"
+  },
   "poll": {
     "create": {
-      "newPoll": "Create Poll"
+      "newPoll": "Create Poll",
+      "input": {
+        "title": {
+          "title": "Title",
+          "placeholder": "Title of the poll..."
+        },
+        "question": {
+          "title": "Question",
+          "placeholder": "What should be voted for..."
+        },
+        "option": {
+          "title": "Add option",
+          "placeholder": "What option can be ranked...",
+          "addOption": "Add option"
+        }
+      },
+      "preview": {
+        "options": "Added options"
+      },
+      "submit": "Create poll"
     }
   }
 }

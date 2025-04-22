@@ -1,8 +1,8 @@
 <template>
   <header>
     <nav>
-      <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="/create-poll">About</RouterLink>
+      <RouterLink to="/">{{ $t('navigation.landingPage') }}</RouterLink>
+      <RouterLink to="/create-poll">{{ $t('navigation.createPoll') }}</RouterLink>
     </nav>
   </header>
 
