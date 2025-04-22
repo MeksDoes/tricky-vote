@@ -6,7 +6,7 @@ import { Option } from '../options/option.model';
 
 export type PollDocument = Poll & Document;
 
-@Schema({ timestamps: true })
+@Schema()
 export class Poll extends Document {
   @Prop({ type: String, default: () => uuidv4(), unique: true })
   pollId?: string;
@@ -31,3 +31,18 @@ export class Poll extends Document {
 }
 
 export const PollSchema = SchemaFactory.createForClass(Poll);
+
+PollSchema.set('toJSON', {
+  transform: function (_doc, ret) {
+    delete ret._id;
+    delete ret.__v;
+
+    if (Array.isArray(ret.options)) {
+      ret.options = ret.options.map((option: Record<string, any>) => {
+        delete option._id;
+        return option;
+      });
+    }
+    return ret;
+  },
+});
