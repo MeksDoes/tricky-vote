@@ -3,8 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { CreatePollDto } from './dto/create-poll.dto';
-import { UpdatePollDto } from './dto/update-poll.dto';
-import { Poll, PollDocument } from './poll.schema';
+import { GetPollDto } from './dto/get-poll.dto';
+import { Poll, PollDocument } from './entities/poll.schema';
 
 @Injectable()
 export class PollService {
@@ -23,7 +23,7 @@ export class PollService {
     return this.pollModel.findOne({ pollId }).exec();
   }
 
-  async update(pollId: string, dto: UpdatePollDto): Promise<PollDocument | null> {
+  async update(pollId: string, dto: GetPollDto): Promise<PollDocument | null> {
     return this.pollModel.findOneAndUpdate({ pollId }, dto, { new: true }).exec();
   }
 

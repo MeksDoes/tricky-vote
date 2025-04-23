@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import { PollController } from './poll.controller';
 import { PollService } from './poll.service';
-import { PollSchema } from './poll.schema';
+import { PollSchema } from './entities/poll.schema';
 
 @Module({
   imports: [MongooseModule.forFeature([{ name: 'Poll', schema: PollSchema }])],
