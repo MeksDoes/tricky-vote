@@ -23,6 +23,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
+  app.enableCors({ origin: process.env.FE_SERVICE_WHITELIST_URL });
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
