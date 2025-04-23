@@ -27,7 +27,7 @@ export class PollService {
     return this.pollModel.findOneAndUpdate({ pollId }, dto, { new: true }).exec();
   }
 
-  async remove(pollId: string): Promise<void> {
-    await this.pollModel.deleteOne({ pollId }).exec();
+  async remove(pollId: string): Promise<PollDocument | null> {
+    return this.pollModel.findOneAndDelete({ pollId }).exec();
   }
 }
