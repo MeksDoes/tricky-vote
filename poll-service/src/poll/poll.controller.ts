@@ -4,6 +4,7 @@ import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 import { CreatePollDto } from './dto/create-poll.dto';
 import { GetPollDto } from './dto/get-poll.dto';
 import { PollService } from './poll.service';
+import NotFoundError from './../exceptions/not-found.exception';
 
 @Controller('polls')
 export class PollController {
@@ -11,31 +12,45 @@ export class PollController {
 
   @Post()
   @ApiCreatedResponse({ type: GetPollDto })
-  create(@Body() createPollDto: CreatePollDto) {
-    return this.pollService.create(createPollDto);
+  async create(@Body() createPollDto: CreatePollDto) {
+    return await this.pollService.create(createPollDto);
   }
 
   @Get()
   @ApiOkResponse({ type: GetPollDto, isArray: true })
-  findAll() {
-    return this.pollService.findAll();
+  async findAll() {
+    return await this.pollService.findAll();
   }
 
   @Get(':pollId')
   @ApiOkResponse({ type: GetPollDto })
-  findOne(@Param('pollId') pollId: string) {
-    return this.pollService.findOne(pollId);
+  async findOne(@Param('pollId') pollId: string) {
+    const poll = await this.pollService.findOne(pollId);
+
+    if (poll === null) {
+      throw new NotFoundError('Poll', pollId);
+    }
+    return poll;
   }
 
   @Patch(':pollId')
   @ApiOkResponse({ type: GetPollDto })
-  update(@Param('pollId') pollId: string, @Body() dto: GetPollDto) {
-    return this.pollService.update(pollId, dto);
+  async update(@Param('pollId') pollId: string, @Body() dto: GetPollDto) {
+    const poll = await this.pollService.update(pollId, dto);
+
+    if (poll === null) {
+      throw new NotFoundError('Poll', pollId);
+    }
+    return poll;
   }
 
   @Delete(':pollId')
   @ApiOkResponse()
-  remove(@Param('pollId') pollId: string) {
-    this.pollService.remove(pollId);
+  async remove(@Param('pollId') pollId: string) {
+    const poll = await this.pollService.remove(pollId);
+
+    if (poll === null) {
+      throw new NotFoundError('Poll', pollId);
+    }
   }
 }
