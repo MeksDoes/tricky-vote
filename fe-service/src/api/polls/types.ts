@@ -3,13 +3,13 @@ export type Option = {
 };
 
 export type Poll = {
-  pollId?: string;
+  pollId: string;
   title: string;
   question: string;
   options: Array<Option>;
 };
 
-export type InputCreatePoll = {
+export type CreatePollDTO = {
   title: string;
   question: string;
   options: Array<Option>;
