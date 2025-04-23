@@ -78,12 +78,10 @@ describe('PollController', () => {
       const questionStub = 'new Question';
 
       expect(mockPollService.update).not.toHaveBeenCalled();
-      expect(controller.update(stubPollId, { question: questionStub })).toEqual(
-        {
-          pollId: stubPollId,
-          question: questionStub,
-        },
-      );
+      expect(controller.update(stubPollId, { question: questionStub })).toEqual({
+        pollId: stubPollId,
+        question: questionStub,
+      });
 
       expect(mockPollService.update).toHaveBeenCalledWith(stubPollId, {
         question: questionStub,
