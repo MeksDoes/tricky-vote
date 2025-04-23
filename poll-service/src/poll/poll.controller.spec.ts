@@ -34,113 +34,111 @@ describe('PollController', () => {
     jest.clearAllMocks();
   });
 
-  describe('polls', () => {
-    it('should be defined', () => {
-      expect(controller).toBeDefined();
+  it('should be defined', () => {
+    expect(controller).toBeDefined();
+  });
+
+  describe('create', () => {
+    it('success', async () => {
+      const stubPollDto: CreatePollDto = {
+        title: 'any title',
+        question: 'any question',
+        options: [new OptionDto('Option 1'), new OptionDto('Option 2')],
+      };
+
+      expect(mockPollService.create).not.toHaveBeenCalled();
+      await controller.create(stubPollDto);
+
+      expect(mockPollService.create).toHaveBeenCalled();
+    });
+  });
+
+  describe('update', () => {
+    it('success', async () => {
+      const stubPollId = 'anyPollId';
+      const stubPollDto: GetPollDto = {
+        pollId: stubPollId,
+        title: 'any title',
+        question: 'any question',
+        options: [new OptionDto('Option 1'), new OptionDto('Option 2')],
+      };
+
+      expect(mockPollService.update).not.toHaveBeenCalled();
+      await controller.update(stubPollId, stubPollDto);
+
+      expect(mockPollService.update).toHaveBeenCalled();
     });
 
-    describe('create', () => {
-      it('success', async () => {
-        const stubPollDto: CreatePollDto = {
-          title: 'any title',
-          question: 'any question',
-          options: [new OptionDto('Option 1'), new OptionDto('Option 2')],
-        };
+    it('if pollId is not found an NotFoundError should be thrown', async () => {
+      const stubPollId = 'anyPollId';
+      mockPollService.findOne.mockResolvedValueOnce(null);
 
-        expect(mockPollService.create).not.toHaveBeenCalled();
-        await controller.create(stubPollDto);
+      expect(mockPollService.findOne).not.toHaveBeenCalled();
+      try {
+        await controller.findOne(stubPollId);
+        fail('Expected NotFoundError to be thrown');
+      } catch (error: unknown) {
+        expect(error).toBeInstanceOf(NotFoundError);
+      }
 
-        expect(mockPollService.create).toHaveBeenCalled();
-      });
+      expect(mockPollService.findOne).toHaveBeenCalled();
+    });
+  });
+
+  describe('remove', () => {
+    it('success', async () => {
+      expect(mockPollService.remove).not.toHaveBeenCalled();
+      await controller.remove('anyPollId');
+
+      expect(mockPollService.remove).toHaveBeenCalled();
     });
 
-    describe('update', () => {
-      it('success', async () => {
-        const stubPollId = 'anyPollId';
-        const stubPollDto: GetPollDto = {
-          pollId: stubPollId,
-          title: 'any title',
-          question: 'any question',
-          options: [new OptionDto('Option 1'), new OptionDto('Option 2')],
-        };
+    it('if pollId is not found an NotFoundError should be thrown', async () => {
+      const stubPollId = 'anyPollId';
+      mockPollService.remove.mockResolvedValueOnce(null);
 
-        expect(mockPollService.update).not.toHaveBeenCalled();
-        await controller.update(stubPollId, stubPollDto);
+      expect(mockPollService.remove).not.toHaveBeenCalled();
+      try {
+        await controller.remove(stubPollId);
+        fail('Expected NotFoundError to be thrown');
+      } catch (error: unknown) {
+        expect(error).toBeInstanceOf(NotFoundError);
+      }
 
-        expect(mockPollService.update).toHaveBeenCalled();
-      });
+      expect(mockPollService.remove).toHaveBeenCalled();
+    });
+  });
 
-      it('if pollId is not found an NotFoundError should be thrown', async () => {
-        const stubPollId = 'anyPollId';
-        mockPollService.findOne.mockResolvedValueOnce(null);
+  describe('findOne', () => {
+    it('success', async () => {
+      expect(mockPollService.findOne).not.toHaveBeenCalled();
+      await controller.findOne('anyPollId');
 
-        expect(mockPollService.findOne).not.toHaveBeenCalled();
-        try {
-          await controller.findOne(stubPollId);
-          fail('Expected NotFoundError to be thrown');
-        } catch (error: unknown) {
-          expect(error).toBeInstanceOf(NotFoundError);
-        }
-
-        expect(mockPollService.findOne).toHaveBeenCalled();
-      });
+      expect(mockPollService.findOne).toHaveBeenCalled();
     });
 
-    describe('remove', () => {
-      it('success', async () => {
-        expect(mockPollService.remove).not.toHaveBeenCalled();
-        await controller.remove('anyPollId');
+    it('if pollId is not found an NotFoundError should be thrown', async () => {
+      const stubPollId = 'anyPollId';
+      mockPollService.findOne.mockResolvedValueOnce(null);
 
-        expect(mockPollService.remove).toHaveBeenCalled();
-      });
+      expect(mockPollService.findOne).not.toHaveBeenCalled();
+      try {
+        await controller.findOne(stubPollId);
+        fail('Expected NotFoundError to be thrown');
+      } catch (error: unknown) {
+        expect(error).toBeInstanceOf(NotFoundError);
+      }
 
-      it('if pollId is not found an NotFoundError should be thrown', async () => {
-        const stubPollId = 'anyPollId';
-        mockPollService.remove.mockResolvedValueOnce(null);
-
-        expect(mockPollService.remove).not.toHaveBeenCalled();
-        try {
-          await controller.remove(stubPollId);
-          fail('Expected NotFoundError to be thrown');
-        } catch (error: unknown) {
-          expect(error).toBeInstanceOf(NotFoundError);
-        }
-
-        expect(mockPollService.remove).toHaveBeenCalled();
-      });
+      expect(mockPollService.findOne).toHaveBeenCalled();
     });
+  });
 
-    describe('findOne', () => {
-      it('success', async () => {
-        expect(mockPollService.findOne).not.toHaveBeenCalled();
-        await controller.findOne('anyPollId');
+  describe('findAll', () => {
+    it('success', async () => {
+      expect(mockPollService.findAll).not.toHaveBeenCalled();
+      await controller.findAll();
 
-        expect(mockPollService.findOne).toHaveBeenCalled();
-      });
-
-      it('if pollId is not found an NotFoundError should be thrown', async () => {
-        const stubPollId = 'anyPollId';
-        mockPollService.findOne.mockResolvedValueOnce(null);
-
-        expect(mockPollService.findOne).not.toHaveBeenCalled();
-        try {
-          await controller.findOne(stubPollId);
-          fail('Expected NotFoundError to be thrown');
-        } catch (error: unknown) {
-          expect(error).toBeInstanceOf(NotFoundError);
-        }
-
-        expect(mockPollService.findOne).toHaveBeenCalled();
-      });
-    });
-
-    describe('findAll', () => {
-      it('success', async () => {
-        expect(mockPollService.findAll).not.toHaveBeenCalled();
-        await controller.findAll();
-
-        expect(mockPollService.findAll).toHaveBeenCalled();
-      });
+      expect(mockPollService.findAll).toHaveBeenCalled();
     });
   });
 });

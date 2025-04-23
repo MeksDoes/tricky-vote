@@ -8,7 +8,10 @@ import { Poll, PollDocument } from './entities/poll.schema';
 
 @Injectable()
 export class PollService {
-  @InjectModel(Poll.name) private pollModel: Model<PollDocument>;
+  constructor(
+    @InjectModel(Poll.name)
+    private readonly pollModel: Model<PollDocument>,
+  ) {}
 
   async create(dto: CreatePollDto): Promise<PollDocument> {
     const createdPoll = new this.pollModel(dto);
