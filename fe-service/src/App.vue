@@ -1,14 +1,16 @@
 <template>
-  <header>
-    <nav>
-      <RouterLink to="/">{{ $t('navigation.landingPage') }}</RouterLink>
-      <RouterLink to="/create-poll">{{ $t('navigation.createPoll') }}</RouterLink>
-    </nav>
-  </header>
+  <div id="tricky-votes">
+    <header>
+      <nav>
+        <RouterLink to="/">{{ $t('navigation.landingPage') }}</RouterLink>
+        <RouterLink to="/create-poll">{{ $t('navigation.createPoll') }}</RouterLink>
+      </nav>
+    </header>
 
-  <main>
-    <RouterView />
-  </main>
+    <main>
+      <RouterView />
+    </main>
+  </div>
 </template>
 
 <style scoped>
@@ -17,10 +19,29 @@ main {
   padding: var(--padding-l);
 }
 
+#tricky-votes {
+  display: flex;
+}
 header {
   line-height: 1.5;
-  max-height: 100vh;
-  margin: auto;
+  position: fixed;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 30vw;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--padding-l);
+  box-sizing: border-box;
+}
+
+main {
+  margin-left: 30vw;
+  width: 50vw;
+  padding: var(--padding-l);
+  box-sizing: border-box;
 }
 
 nav {
