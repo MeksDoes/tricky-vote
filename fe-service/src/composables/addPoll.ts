@@ -7,7 +7,6 @@ import { type APIResponse } from '../api/types';
 import { type CreatePollDTO, type Poll } from '../api/polls/types';
 
 export function addPoll() {
-  const poll = ref<Poll>();
   const isLoading = ref(false);
   const error = ref<AxiosError<string> | null>(null);
 
@@ -18,11 +17,9 @@ export function addPoll() {
       const { status, data } = await API.polls.createPoll(input);
 
       if (status === 201) {
-        poll.value = data.content;
-
         return {
           success: true,
-          content: null,
+          content: data,
         };
       }
     } catch (err) {
@@ -45,7 +42,6 @@ export function addPoll() {
 
   return {
     postPoll: dispatchCreatePoll,
-    poll,
     isLoading,
     error,
   };

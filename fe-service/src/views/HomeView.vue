@@ -6,33 +6,34 @@
   <div class="polls">
     <div v-for="(poll, index) in polls" :key="index" class="polls__item">
       <h2 v-text="poll.title" />
-      <p v-text="poll.pollId" />
+      <a @click="showPoll(poll.pollId)" v-text="poll.pollId" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
+import { type Poll } from '../api/polls/types';
 import { fetchPolls } from '../composables/getPolls';
-const { getPolls, polls, isLoading, error } = fetchPolls();
 
-onMounted(async () => {
-  const { success, status } = await getPolls();
-  console.log({ polls });
-  console.log(isLoading);
-  console.log(error);
-
-  if (!success) {
-    console.log('Api status ->', status);
-  }
-});
-
-// debugger;
-
+const { getPolls, isLoading, error } = fetchPolls();
+const polls = ref<Poll[]>();
 const router = useRouter();
 
+onMounted(async () => {
+  const { content, success, status } = await getPolls();
+  if (!success) {
+    console.error('Error fetching poll:', status);
+    return;
+  }
+  polls.value = content;
+});
+
+const showPoll = (pollId: string): void => {
+  router.push({ name: 'show-poll', params: { pollId } });
+};
 const goToCreatePoll = (): void => {
   router.push('/create-poll');
 };

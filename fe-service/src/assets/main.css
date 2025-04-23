@@ -9,14 +9,15 @@
 
 a {
   text-decoration: none;
-  color: rgba(var( --color-vibrant-rgb), 0.1);
+  color: rgba(var(--color-vibrant-rgb), 0.8);
   transition: 0.4s;
 }
 
 @media (hover: hover) {
   a:hover {
-    background-color: rgba(var( --color-vibrant-rgb), 0.2);
+    background-color: rgba(var(--color-vibrant-rgb), 0.2);
     border-radius: var(--radius-m);
+    cursor: pointer;
   }
 }
 
