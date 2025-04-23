@@ -4,6 +4,11 @@
     "landingPage": "Home",
     "createPoll": "Create poll"
   },
+  "common": {
+    "loading": {
+      "message": "Loading..."
+    }
+  },
   "poll": {
     "create": {
       "newPoll": "Create Poll",
@@ -26,6 +31,9 @@
         "options": "Added options"
       },
       "submit": "Create poll"
+    },
+    "option": {
+      "title": "Options"
     }
   }
 }

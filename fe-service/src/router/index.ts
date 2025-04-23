@@ -15,6 +15,11 @@ const router = createRouter({
       name: 'create-poll',
       component: CreatePoll,
     },
+    {
+      path: '/poll/:pollId',
+      name: 'show-poll',
+      component: () => import('@/views/ShowPoll.vue'),
+    },
   ],
 });
 

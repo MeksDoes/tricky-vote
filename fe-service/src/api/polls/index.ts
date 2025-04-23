@@ -7,6 +7,10 @@ async function getPolls() {
   return await http.get<APIResponse<Poll[]>>('polls');
 }
 
+async function getPoll(id: string) {
+  return await http.get<APIResponse<Poll>>(`polls/${id}`);
+}
+
 async function deletePoll(id: string) {
   return await http.delete<APIResponse<boolean>>(`polls/${id}`);
 }
@@ -21,6 +25,7 @@ async function updatePoll(input: CreatePollDTO) {
 
 export default {
   getPolls,
+  getPoll,
   createPoll,
   updatePoll,
   deletePoll,
