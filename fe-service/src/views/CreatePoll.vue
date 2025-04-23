@@ -40,11 +40,14 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
 
 import BaseInput from '@/components/BaseInput.vue';
 import { addPoll } from '../composables/addPoll';
 import { type Options, type CreatePollDTO } from '../api/polls/types';
-const { postPoll, poll, isLoading, error } = addPoll();
+
+const router = useRouter();
+const { postPoll, isLoading, error } = addPoll();
 
 const title = ref('');
 const question = ref('');
@@ -68,7 +71,11 @@ async function submitPoll() {
     options: options.value,
   };
 
-  await postPoll(newPoll);
+  const { success, content } = await postPoll(newPoll);
+
+  if (success && content.pollId) {
+    router.push({ name: 'show-poll', params: { pollId: content.pollId } });
+  }
 }
 </script>
 
