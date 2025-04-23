@@ -29,23 +29,27 @@
       <h3 v-text="$t('poll.create.preview.options')" />
       <ul>
         <li v-for="(option, index) in options" :key="index">
-          {{ option }}
+          {{ option.text }}
         </li>
       </ul>
     </div>
-
-    <button :disabled="pollIsValid" @click="submitPoll" v-text="$t('poll.create.submit')" />
+    <!-- :disabled="!pollIsValid" -->
+    <button @click="submitPoll" v-text="$t('poll.create.submit')" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+
 import BaseInput from '@/components/BaseInput.vue';
+import { addPoll } from '../composables/addPoll';
+import { type Options, type CreatePollDTO } from '../api/polls/types';
+const { postPoll, poll, isLoading, error } = addPoll();
 
 const title = ref('');
 const question = ref('');
 const newOption = ref('');
-const options = ref<string[]>([]);
+const options = ref<Options[]>([]);
 
 const pollIsValid = computed(() => {
   return true;
@@ -53,12 +57,18 @@ const pollIsValid = computed(() => {
 
 function addOption() {
   if (newOption.value.trim().length === 0) return;
-  options.value.push(newOption.value.trim());
+  options.value.push({ text: newOption.value.trim() });
   newOption.value = '';
 }
 
-function submitPoll() {
-  console.log('submitPoll');
+async function submitPoll() {
+  const newPoll: CreatePollDTO = {
+    title: title.value,
+    question: question.value,
+    options: options.value,
+  };
+
+  await postPoll(newPoll);
 }
 </script>
 
