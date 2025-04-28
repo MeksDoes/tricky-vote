@@ -1,10 +1,15 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { AxiosError, AxiosRequestHeaders, InternalAxiosRequestConfig, AxiosResponse } from 'axios';
+import {
+  AxiosError,
+  type AxiosRequestHeaders,
+  type InternalAxiosRequestConfig,
+  type AxiosResponse,
+} from 'axios';
 
-import { fetchPolls } from '../../../src/composables/getPolls';
-import { API } from '../../../src/api';
-import { type ComposableAPIResponse } from '../../../src/composables/types';
-import { Poll } from '../../../src/api/polls/types';
+import { fetchPolls } from '../getPolls.ts';
+import { API } from '../../api';
+import { type ComposableAPIResponse } from '../types.ts';
+import { type Poll } from '../../api/polls/types.ts';
 
 vi.mock('../../../src/api', () => ({
   API: {
