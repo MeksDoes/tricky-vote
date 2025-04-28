@@ -1,18 +1,18 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { AxiosError } from 'axios';
+import { AxiosError, AxiosRequestHeaders, InternalAxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { addPoll } from '../../../src/composables/addPoll';
 import { API } from '../../../src/api';
-import { type CreatePollDTO } from '../../../src/api/polls/types';
+import { type CreatePollDTO, Poll } from '../../../src/api/polls/types';
+import type { ComposableAPIResponse } from '../../../src/composables/types';
 
 vi.mock('../../../src/api', () => ({
   API: {
     polls: {
-      createPoll: vi.fn<() => Promise<AxiosResponse<APIResponse<null>>>>(),
+      createPoll: vi.fn<() => Promise<AxiosResponse<ComposableAPIResponse<null>>>>(),
     },
   },
 }));
-
 
 describe('addPoll composable', () => {
   beforeEach(() => {
@@ -20,22 +20,27 @@ describe('addPoll composable', () => {
   });
 
   it('should return the created poll', async () => {
-    const pollDataMock: CreatePollDTO = {
+    const pollId = '12345';
+    const pollDataDTOMock: CreatePollDTO = {
       title: 'Test Poll',
-      options: [{text: 'Option 1'}, {text: 'Option 2'}],
+      options: [{ text: 'Option 1' }, { text: 'Option 2' }],
       question: 'any question',
     };
-    const axiosResponse: AxiosResponse<APIResponse<null>> = {
+    const pollDataMock: Poll = {
+      ...pollDataDTOMock,
+      pollId,
+    };
+    const axiosResponse: AxiosResponse<Poll> = {
       data: pollDataMock,
       status: 201,
       statusText: 'Created',
-      headers: {},
-      config: {},
+      headers: {} as AxiosRequestHeaders,
+      config: {} as InternalAxiosRequestConfig,
     };
     vi.mocked(API.polls.createPoll).mockResolvedValueOnce(axiosResponse);
 
     const { postPoll, isLoading, error } = addPoll();
-    const promise = postPoll(pollDataMock);
+    const promise = postPoll(pollDataDTOMock);
 
     expect(isLoading.value).toBe(true);
     const result = await promise;
@@ -48,25 +53,23 @@ describe('addPoll composable', () => {
 
   it('should handle API errors with AxiosError', async () => {
     const anyStatusCode = 999;
-    const mockPollData: CreatePollDTO = {
+    const pollDataDTOMock: CreatePollDTO = {
       title: 'Test Poll',
-      options: [{text: 'Option 1'}, {text: 'Option 2'}],
+      options: [{ text: 'Option 1' }, { text: 'Option 2' }],
       question: 'any question',
     };
 
     const axiosError = new AxiosError('Bad Request', undefined, undefined, undefined, {
       status: anyStatusCode,
       statusText: 'Bad Request',
-      headers: {},
       data: 'Bad request',
-      config: {
-        headers: {},
-      } as AxiosRequestHeaders,
+      headers: {} as AxiosRequestHeaders,
+      config: {} as InternalAxiosRequestConfig,
     });
     vi.mocked(API.polls.createPoll).mockRejectedValueOnce(axiosError);
 
     const { postPoll, isLoading, error } = addPoll();
-    const promise = postPoll(mockPollData);
+    const promise = postPoll(pollDataDTOMock);
 
     expect(isLoading.value).toBe(true);
     const result = await promise;
@@ -81,15 +84,15 @@ describe('addPoll composable', () => {
   });
 
   it('Unknown errors should be available in error.value', async () => {
-    const mockPollData: CreatePollDTO = {
+    const pollDataDTOMock: CreatePollDTO = {
       title: 'Test Poll',
-      options: [{text: 'Option 1'}, {text: 'Option 2'}],
+      options: [{ text: 'Option 1' }, { text: 'Option 2' }],
       question: 'any question',
     };
     vi.mocked(API.polls.createPoll).mockRejectedValueOnce(new Error('Unknown error'));
 
     const { postPoll, isLoading, error } = addPoll();
-    const promise = postPoll(mockPollData);
+    const promise = postPoll(pollDataDTOMock);
 
     expect(isLoading.value).toBe(true);
     const result = await promise;
@@ -103,22 +106,28 @@ describe('addPoll composable', () => {
 
   it('Unexpected status code should return null', async () => {
     const unexpectedStatusCode = 999;
-    const pollDataMock: CreatePollDTO = {
+
+    const pollId = '12345';
+    const pollDataDTOMock: CreatePollDTO = {
       title: 'Test Poll',
-      options: [{text: 'Option 1'}, {text: 'Option 2'}],
+      options: [{ text: 'Option 1' }, { text: 'Option 2' }],
       question: 'any question',
     };
-    const axiosResponse: AxiosResponse<APIResponse<null>> = {
+    const pollDataMock: Poll = {
+      ...pollDataDTOMock,
+      pollId,
+    };
+    const axiosResponse: AxiosResponse<Poll> = {
       data: pollDataMock,
       status: unexpectedStatusCode,
       statusText: 'Any',
-      headers: {},
-      config: {},
+      headers: {} as AxiosRequestHeaders,
+      config: {} as InternalAxiosRequestConfig,
     };
     vi.mocked(API.polls.createPoll).mockResolvedValueOnce(axiosResponse);
 
     const { postPoll, isLoading, error } = addPoll();
-    const promise = postPoll(pollDataMock);
+    const promise = postPoll(pollDataDTOMock);
 
     expect(isLoading.value).toBe(true);
     const result = await promise;

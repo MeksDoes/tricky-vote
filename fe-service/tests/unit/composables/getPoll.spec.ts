@@ -1,14 +1,15 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { AxiosError } from 'axios';
+import { AxiosError, AxiosRequestHeaders, InternalAxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { fetchPoll } from '../../../src/composables/getPoll';
 import { API } from '../../../src/api';
-import { type APIResponse } from '../../../src/composables/types';
+import { type ComposableAPIResponse } from '../../../src/composables/types';
+import { Poll } from '../../../src/api/polls/types';
 
 vi.mock('../../../src/api', () => ({
   API: {
     polls: {
-      getPoll: vi.fn<() => Promise<AxiosResponse<APIResponse<null>>>>(),
+      getPoll: vi.fn<() => Promise<AxiosResponse<ComposableAPIResponse<null>>>>(),
     },
   },
 }));
@@ -24,14 +25,15 @@ describe('fetchPoll composable', () => {
       title: 'Test Poll',
       options: [{ text: 'Option 1' }, { text: 'Option 2' }],
       question: 'Any question',
+      pollId,
     };
 
-    const axiosResponse: AxiosResponse<APIResponse<null>> = {
+    const axiosResponse: AxiosResponse<Poll> = {
       data: pollDataMock,
       status: 200,
       statusText: 'OK',
-      headers: {},
-      config: {},
+      headers: {} as AxiosRequestHeaders,
+      config: {} as InternalAxiosRequestConfig,
     };
     vi.mocked(API.polls.getPoll).mockResolvedValueOnce(axiosResponse);
 
@@ -54,11 +56,9 @@ describe('fetchPoll composable', () => {
     const axiosError = new AxiosError('Internal Server Error', undefined, undefined, undefined, {
       status: anyStatusCode,
       statusText: 'Internal Server Error',
-      headers: {},
       data: 'Server error',
-      config: {
-        headers: {},
-      } as AxiosRequestHeaders,
+      headers: {} as AxiosRequestHeaders,
+      config: {} as InternalAxiosRequestConfig,
     });
 
     vi.mocked(API.polls.getPoll).mockRejectedValueOnce(axiosError);
@@ -101,14 +101,19 @@ describe('fetchPoll composable', () => {
   it('Unexpected status code should return null', async () => {
     const pollId = '12345';
     const unexpectedStatusCode = 999;
-    const pollDataMock = { title: 'Test Poll', options: [{ text: 'Option 1' }, { text: 'Option 2' }] };
+    const pollDataMock = {
+      title: 'Test Poll',
+      options: [{ text: 'Option 1' }, { text: 'Option 2' }],
+      question: 'Any question',
+      pollId,
+    };
 
-    const axiosResponse: AxiosResponse<APIResponse<null>> = {
+    const axiosResponse: AxiosResponse<Poll> = {
       data: pollDataMock,
       status: unexpectedStatusCode,
       statusText: 'Unexpected Status',
-      headers: {},
-      config: {},
+      headers: {} as AxiosRequestHeaders,
+      config: {} as InternalAxiosRequestConfig,
     };
     vi.mocked(API.polls.getPoll).mockResolvedValueOnce(axiosResponse);
 
