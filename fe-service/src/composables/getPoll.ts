@@ -2,13 +2,14 @@ import { ref } from 'vue';
 import { AxiosError } from 'axios';
 
 import { API } from '../api';
-import { type APIResponse } from '../api/types';
+import { type ComposableAPIResponse } from './types.ts';
+import type { Poll } from '../api/polls/types.ts';
 
 export function fetchPoll() {
   const isLoading = ref(false);
   const error = ref<AxiosError<string> | null>(null);
 
-  async function dispatchGetPollById(pollId: string): Promise<APIResponse<null>> {
+  async function dispatchGetPollById(pollId: string): Promise<ComposableAPIResponse<Poll | null>> {
     isLoading.value = true;
 
     try {
