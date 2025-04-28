@@ -2,15 +2,14 @@ import { ref } from 'vue';
 import { AxiosError } from 'axios';
 
 import { API } from '../api';
-import { type APIResponse } from '../api/types';
-
+import { type ComposableAPIResponse } from './types.ts';
 import { type CreatePollDTO, type Poll } from '../api/polls/types';
 
 export function addPoll() {
   const isLoading = ref(false);
   const error = ref<AxiosError<string> | null>(null);
 
-  async function dispatchCreatePoll(input: CreatePollDTO): Promise<APIResponse<null>> {
+  async function dispatchCreatePoll(input: CreatePollDTO): Promise<ComposableAPIResponse<Poll | null>> {
     isLoading.value = true;
 
     try {

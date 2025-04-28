@@ -1,4 +1,4 @@
-export type APIResponse<T> = {
+export type ComposableAPIResponse<T> = {
   success: boolean;
   content: T;
   status?: number;
