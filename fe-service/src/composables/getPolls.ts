@@ -3,6 +3,7 @@ import { AxiosError } from 'axios';
 
 import { API } from '../api';
 import { type ComposableAPIResponse } from './types.ts';
+import type { Poll } from '../api/polls/types.ts';
 
 export function fetchPolls() {
   const isLoading = ref(false);
