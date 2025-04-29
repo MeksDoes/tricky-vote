@@ -22,8 +22,8 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
-import { type Poll } from '../api/polls/types';
-import { fetchPoll } from '../composables/getPoll';
+import { type Poll } from '@/api/polls/types';
+import { fetchPoll } from '@/composables/getPoll';
 
 const { pollId } = useRoute().params as { pollId: string };
 const { getPoll, isLoading, error } = fetchPoll();
@@ -31,7 +31,7 @@ const poll = ref<Poll>();
 
 onMounted(async () => {
   const { content, success, status } = await getPoll(pollId);
-  if (!success) {
+  if (!success || !content) {
     console.error('Error fetching poll:', status);
     return;
   }

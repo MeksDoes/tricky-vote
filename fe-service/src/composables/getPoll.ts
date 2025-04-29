@@ -1,9 +1,9 @@
 import { ref } from 'vue';
 import { AxiosError } from 'axios';
 
-import { API } from '../api';
+import { API } from '@/api';
+import type { Poll } from '@/api/polls/types.ts';
 import { type ComposableAPIResponse } from './types.ts';
-import type { Poll } from '../api/polls/types.ts';
 
 export function fetchPoll() {
   const isLoading = ref(false);

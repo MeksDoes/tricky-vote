@@ -24,7 +24,7 @@ const router = useRouter();
 
 onMounted(async () => {
   const { content, success, status } = await getPolls();
-  if (!success) {
+  if (!success || !content) {
     console.error('Error fetching poll:', status);
     return;
   }
