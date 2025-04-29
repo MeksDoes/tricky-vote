@@ -1,0 +1,115 @@
+stages:
+  - install
+  - build
+  - test
+
+# Setup node
+default:
+  image: node:22.15
+  before_script:
+    - npm config set progress=false
+    - npm config set depth=0
+  cache:
+    key: "$CI_JOB_NAME"
+    paths:
+      - node_modules/
+  interruptible: true
+  retry: 1
+
+# Install Dependencies for poll-service
+install:poll-service:
+  stage: install
+  variables:
+    CI_PROJECT_DIR: "$CI_PROJECT_DIR/poll-service"
+  script:
+    - cd poll-service
+    - npm ci
+  artifacts:
+    paths:
+      - poll-service/node_modules/
+
+# Install Dependencies for fe-service
+install:fe-service:
+  stage: install
+  variables:
+    CI_PROJECT_DIR: "$CI_PROJECT_DIR/fe-service"
+  script:
+    - cd fe-service
+    - npm ci
+  artifacts:
+    paths:
+      - fe-service/node_modules/
+
+generate:fe-service-env:
+  stage: install
+  script:
+    - |
+      cat <<EOF > fe-service/.env
+      VITE_API_ENDPOINT=${VITE_API_ENDPOINT}
+      EOF
+  artifacts:
+    paths:
+      - fe-service/.env
+    expire_in: 1 hour
+
+generate:poll-service-env:
+  stage: install
+  script:
+    - |
+      cat <<EOF > poll-service/.env
+      MONGODB_USERNAME=${MONGODB_USERNAME}
+      MONGODB_PASSWORD=${MONGODB_PASSWORD}
+      MONGODB_ENVIROMENT=${MONGODB_ENVIROMENT}
+      MONGODB_PORT=${MONGODB_PORT}
+      MONGODB_DATABASE=${MONGODB_DATABASE}
+      FE_SERVICE_WHITELIST_URL=${FE_SERVICE_WHITELIST_URL}
+      PORT=${PORT-3000}
+      EOF
+  artifacts:
+    paths:
+      - poll-service/.env
+    expire_in: 1 hour
+
+# Build poll-service
+build:poll-service:
+  stage: build
+  needs: ["install:poll-service", "generate:poll-service-env"]
+  script:
+    - cd poll-service
+    - npm run build
+  artifacts:
+    paths:
+      - poll-service/dist/
+
+# Build fe-service
+build:fe-service:
+  stage: build
+  needs: ["install:fe-service", "generate:fe-service-env"]
+  script:
+    - cd fe-service
+    - npm run build
+  artifacts:
+    paths:
+      - fe-service/dist/
+
+# Test poll-service
+test:poll-service:
+  stage: test
+  needs: ["install:poll-service", "build:poll-service"]
+  script:
+    - cd poll-service
+    - npm run test:unit
+
+# Test fe-service
+test:fe-service:
+  stage: test
+  needs: ["install:fe-service", "build:fe-service"]
+  script:
+    - cd fe-service
+    - npm run test:unit
+
+# Pipeline runs on all branches on each Push/Merge
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE
+      when: always
