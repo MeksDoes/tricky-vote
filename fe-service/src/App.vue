@@ -2,8 +2,8 @@
   <div id="tricky-votes">
     <header>
       <nav>
-        <RouterLink to="/">{{ $t('navigation.landingPage') }}</RouterLink>
-        <RouterLink to="/create-poll">{{ $t('navigation.createPoll') }}</RouterLink>
+        <RouterLink to="/">{{ t('navigation.landingPage') }}</RouterLink>
+        <RouterLink to="/create-poll">{{ t('navigation.createPoll') }}</RouterLink>
       </nav>
     </header>
 
@@ -12,6 +12,12 @@
     </main>
   </div>
 </template>
+
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
+</script>
 
 <style scoped>
 header,

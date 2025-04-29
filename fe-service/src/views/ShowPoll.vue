@@ -1,13 +1,13 @@
 <template>
   <div class="poll-view">
-    <div v-if="isLoading">{{ $t('common.loading.message') }}</div>
+    <div v-if="isLoading">{{ t('common.loading.message') }}</div>
     <div v-else-if="error">{{ error }}</div>
     <div v-else-if="poll">
       <h1 class="poll-view__title">{{ poll.title }}</h1>
       <h2 class="poll-view__question">{{ poll.question }}</h2>
 
       <div class="poll-view__options">
-        <h3>{{ $t('poll.option.title') }}</h3>
+        <h3>{{ t('poll.option.title') }}</h3>
         <ul>
           <li v-for="(option, index) in poll.options" :key="index">
             {{ option.text }}
@@ -21,10 +21,12 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 
 import { type Poll } from '@/api/polls/types';
 import { fetchPoll } from '@/composables/getPoll';
 
+const { t } = useI18n();
 const { pollId } = useRoute().params as { pollId: string };
 const { getPoll, isLoading, error } = fetchPoll();
 const poll = ref<Poll>();

@@ -1,7 +1,7 @@
 <template>
-  <h1 v-text="$t('title')" />
+  <h1 v-text="t('title')" />
 
-  <button @click="goToCreatePoll" v-text="$t('poll.create.newPoll')" />
+  <button @click="goToCreatePoll" v-text="t('poll.create.newPoll')" />
 
   <div class="polls">
     <div v-for="(poll, index) in polls" :key="index" class="polls__item">
@@ -14,10 +14,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 
 import { type Poll } from '../api/polls/types';
 import { fetchPolls } from '../composables/getPolls';
 
+const { t } = useI18n();
 const { getPolls, isLoading, error } = fetchPolls();
 const polls = ref<Poll[]>();
 const router = useRouter();

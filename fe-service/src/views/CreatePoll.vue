@@ -1,32 +1,32 @@
 <template>
   <div class="create-poll">
     <BaseInput
-      :label="$t('poll.create.input.title.title')"
-      :placeholder="$t('poll.create.input.title.placeholder')"
+      :label="t('poll.create.input.title.title')"
+      :placeholder="t('poll.create.input.title.placeholder')"
       v-model="title"
     />
     <BaseInput
-      :label="$t('poll.create.input.question.title')"
-      :placeholder="$t('poll.create.input.question.placeholder')"
+      :label="t('poll.create.input.question.title')"
+      :placeholder="t('poll.create.input.question.placeholder')"
       v-model="question"
     />
 
     <div class="add-option">
       <BaseInput
         class="add-option--base-input"
-        :label="$t('poll.create.input.option.title')"
-        :placeholder="$t('poll.create.input.option.placeholder')"
+        :label="t('poll.create.input.option.title')"
+        :placeholder="t('poll.create.input.option.placeholder')"
         v-model="newOption"
       />
       <button
         :disabled="newOption.trim().length === 0"
         @click="addOption"
-        v-text="$t('poll.create.input.option.addOption')"
+        v-text="t('poll.create.input.option.addOption')"
       />
     </div>
 
     <div class="create-poll__preview" v-if="options.length > 0">
-      <h3 v-text="$t('poll.create.preview.options')" />
+      <h3 v-text="t('poll.create.preview.options')" />
       <ul>
         <li v-for="(option, index) in options" :key="index">
           {{ option.text }}
@@ -34,25 +34,27 @@
       </ul>
     </div>
     <!-- :disabled="!pollIsValid" -->
-    <button @click="submitPoll" v-text="$t('poll.create.submit')" />
+    <button @click="submitPoll" v-text="t('poll.create.submit')" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 
 import BaseInput from '@/components/BaseInput.vue';
 import { addPoll } from '@/composables/addPoll';
-import { type Options, type CreatePollDTO } from '@/api/polls/types';
+import { type Option, type CreatePollDTO } from '@/api/polls/types';
 
+const { t } = useI18n();
 const router = useRouter();
 const { postPoll, isLoading, error } = addPoll();
 
 const title = ref('');
 const question = ref('');
 const newOption = ref('');
-const options = ref<Options[]>([]);
+const options = ref<Option[]>([]);
 
 const pollIsValid = computed(() => {
   return true;
