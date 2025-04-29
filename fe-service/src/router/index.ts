@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import HomeView from '../views/HomeView.vue';
-import CreatePoll from '../views/CreatePoll.vue';
+import HomeView from '@/views/HomeView.vue';
+import CreatePoll from '@/views/CreatePoll.vue';
 
 const routes = [
   {

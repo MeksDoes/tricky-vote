@@ -43,8 +43,8 @@ import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 
 import BaseInput from '@/components/BaseInput.vue';
-import { addPoll } from '../composables/addPoll';
-import { type Options, type CreatePollDTO } from '../api/polls/types';
+import { addPoll } from '@/composables/addPoll';
+import { type Options, type CreatePollDTO } from '@/api/polls/types';
 
 const router = useRouter();
 const { postPoll, isLoading, error } = addPoll();
