@@ -3,7 +3,8 @@
 
   <button @click="goToCreatePoll" v-text="t('poll.create.newPoll')" />
 
-  <div class="polls">
+  <div v-if="isLoading">{{ t('common.loading.message') }}</div>
+  <div v-if="!isLoading" class="polls">
     <div v-for="(poll, index) in polls" :key="index" class="polls__item">
       <h2 v-text="poll.title" />
       <a @click="showPoll(poll.pollId)" v-text="poll.pollId" />
@@ -20,7 +21,7 @@ import { type Poll } from '../api/polls/types';
 import { fetchPolls } from '../composables/getPolls';
 
 const { t } = useI18n();
-const { getPolls, isLoading, error } = fetchPolls();
+const { getPolls, isLoading } = fetchPolls();
 const polls = ref<Poll[]>();
 const router = useRouter();
 

@@ -1,5 +1,6 @@
 <template>
   <div class="create-poll">
+    <div v-if="isLoading">{{ t('common.loading.message') }}</div>
     <BaseInput
       :label="t('poll.create.input.title.title')"
       :placeholder="t('poll.create.input.title.placeholder')"
@@ -33,8 +34,7 @@
         </li>
       </ul>
     </div>
-    <!-- :disabled="!pollIsValid" -->
-    <button @click="submitPoll" v-text="t('poll.create.submit')" />
+    <button :disabled="!pollIsValid" @click="submitPoll" v-text="t('poll.create.submit')" />
   </div>
 </template>
 
@@ -49,13 +49,14 @@ import { type Option, type CreatePollDTO } from '@/api/polls/types';
 
 const { t } = useI18n();
 const router = useRouter();
-const { postPoll, isLoading, error } = addPoll();
+const { postPoll, isLoading } = addPoll();
 
 const title = ref('');
 const question = ref('');
 const newOption = ref('');
 const options = ref<Option[]>([]);
 
+// Todo: validate inputs
 const pollIsValid = computed(() => {
   return true;
 });
@@ -75,8 +76,8 @@ async function submitPoll() {
 
   const { success, content } = await postPoll(newPoll);
 
-  if (success && content.pollId) {
-    router.push({ name: 'show-poll', params: { pollId: content.pollId } });
+  if (success && content?.pollId) {
+    await router.push({ name: 'show-poll', params: { pollId: content.pollId } });
   }
 }
 </script>
