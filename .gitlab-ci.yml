@@ -2,6 +2,7 @@ stages:
   - install
   - build
   - test
+  - sonar
 
 # Setup node
 default:
@@ -19,8 +20,6 @@ default:
 # Install Dependencies for poll-service
 install:poll-service:
   stage: install
-  variables:
-    CI_PROJECT_DIR: "$CI_PROJECT_DIR/poll-service"
   script:
     - cd poll-service
     - npm ci
@@ -31,8 +30,6 @@ install:poll-service:
 # Install Dependencies for fe-service
 install:fe-service:
   stage: install
-  variables:
-    CI_PROJECT_DIR: "$CI_PROJECT_DIR/fe-service"
   script:
     - cd fe-service
     - npm ci
@@ -98,7 +95,10 @@ test:poll-service:
   needs: ["install:poll-service", "build:poll-service"]
   script:
     - cd poll-service
-    - npm run test:unit
+    - npm run test:cov
+  artifacts:
+    paths:
+      - poll-service/coverage/lcov.info
 
 # Test fe-service
 test:fe-service:
@@ -106,9 +106,50 @@ test:fe-service:
   needs: ["install:fe-service", "build:fe-service"]
   script:
     - cd fe-service
-    - npm run test:unit
+    - npm run test:cov
+  artifacts:
+    paths:
+      - fe-service/coverage/lcov.info
 
-# Pipeline runs on all branches on each Push/Merge
+# Sonar cloud
+variables:
+  SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"
+  GIT_DEPTH: "0"
+
+sonarcloud-check-fe:
+  stage: sonar
+  image:
+    name: sonarsource/sonar-scanner-cli:latest
+    entrypoint: [""]
+  needs:
+    - test:fe-service
+  script:
+    - sonar-scanner -Dproject.settings=sonar-project.fe-service.properties
+  variables:
+    SONAR_TOKEN: $SONAR_TOKEN_FE
+    GIT_DEPTH: "0"
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+
+sonarcloud-check-be:
+  stage: sonar
+  image:
+    name: sonarsource/sonar-scanner-cli:latest
+    entrypoint: [""]
+  needs:
+    - test:poll-service
+  script:
+    - sonar-scanner -Dproject.settings=sonar-project.poll-service.properties
+  variables:
+    SONAR_TOKEN: $SONAR_TOKEN_BE
+    GIT_DEPTH: "0"
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+
 workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE
